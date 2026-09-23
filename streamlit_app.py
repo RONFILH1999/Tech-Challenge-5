@@ -12,97 +12,40 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Estilização CSS personalizada para Modo Light Elegante, Alta Legibilidade e Rolagem Suave
+# Estilização CSS adaptável para suportar nativamente os modos Light, Dark e System
 st.markdown("""
 <style>
-    /* Estilos Gerais do Tema Light com Alto Contraste para Leitura Perfeita */
-    .stApp {
-        background-color: #F8FAFC;
-        color: #0B0F19;
-    }
-    
-    /* Textos Gerais, Títulos e Labels */
-    h1, h2, h3, h4, h5, h6, p, span, label, .stMarkdown, .stRadio label, .stCheckbox label {
-        color: #0B0F19 !important;
-    }
-    
+    /* Estilos dos cabeçalhos específicos */
     .main-header {
         font-size: 2.2rem;
         font-weight: 800;
-        color: #1E3A8A !important;
         margin-bottom: 0.2rem;
     }
     .sub-header {
         font-size: 1.05rem;
-        color: #1E293B !important;
         margin-bottom: 1.5rem;
     }
     
-    /* Inputs, Sliders e Widgets visíveis e legíveis no Light Mode */
-    .stTextInput input, .stNumberInput input, .stSelectbox div[data-baseweb="select"] {
-        background-color: #FFFFFF !important;
-        color: #0B0F19 !important;
-        border-color: #94A3B8 !important;
-        font-weight: 500;
-    }
-
-    /* Rótulos dos Sliders e Number Inputs com alta visibilidade */
-    .stSlider label, .stNumberInput label, .stSelectbox label, .stFileUploader label {
-        color: #0B0F19 !important;
-        font-weight: 600 !important;
-    }
-    
-    /* Estilização de Cards e Métricas */
-    .metric-card {
-        background-color: #FFFFFF;
-        border-radius: 12px;
-        padding: 1.2rem;
-        border: 1px solid #CBD5E1;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-        color: #0B0F19;
-    }
-    
-    /* Alertas de Risco com Cores Suaves e Ótimo Contraste */
+    /* Alertas de Risco com Cores Suaves e Alto Contraste */
     .risk-high {
-        background-color: #FFF1F2;
+        background-color: rgba(225, 29, 72, 0.1);
         border-left: 5px solid #E11D48;
         padding: 1rem;
         border-radius: 8px;
-        color: #881337 !important;
-        border-top: 1px solid #FFE4E6;
-        border-right: 1px solid #FFE4E6;
-        border-bottom: 1px solid #FFE4E6;
-    }
-    .risk-high * {
-        color: #881337 !important;
     }
     
     .risk-low {
-        background-color: #F0FDF4;
+        background-color: rgba(22, 163, 74, 0.1);
         border-left: 5px solid #16A34A;
         padding: 1rem;
         border-radius: 8px;
-        color: #14532D !important;
-        border-top: 1px solid #DCFCE7;
-        border-right: 1px solid #DCFCE7;
-        border-bottom: 1px solid #DCFCE7;
-    }
-    .risk-low * {
-        color: #14532D !important;
     }
     
     .risk-medium {
-        background-color: #FFFBEB;
+        background-color: rgba(217, 119, 6, 0.1);
         border-left: 5px solid #D97706;
         padding: 1rem;
         border-radius: 8px;
-        color: #78350F !important;
-        border-top: 1px solid #FEF3C7;
-        border-right: 1px solid #FEF3C7;
-        border-bottom: 1px solid #FEF3C7;
-    }
-    .risk-medium * {
-        color: #78350F !important;
     }
 
     /* Ajustes das Abas */
@@ -114,13 +57,6 @@ st.markdown("""
         font-weight: 600;
         border-radius: 8px 8px 0px 0px;
         padding: 0 16px;
-        background-color: #E2E8F0;
-        color: #1E293B !important;
-    }
-    .stTabs [aria-selected="true"] {
-        background-color: #FFFFFF !important;
-        color: #1E3A8A !important;
-        border-top: 3px solid #1E3A8A !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -409,10 +345,7 @@ elif menu == "Simulação em Lote / Turma":
             c3.metric("Risco Moderado", f"{moderados} ({moderados/tot*100:.0f}%)")
             c4.metric("Baixo Risco", f"{baixos} ({baixos/tot*100:.0f}%)")
 
-            st.dataframe(df_resultado.style.apply(
-                lambda row: ['background-color: #FFF1F2' if row['Status'] == 'Alto Risco' else ('background-color: #F0FDF4' if row['Status'] == 'Baixo Risco' else 'background-color: #FFFBEB') for _ in row],
-                axis=1
-            ), use_container_width=True)
+            st.dataframe(df_resultado, use_container_width=True)
 
             csv_data = df_resultado.to_csv(index=False).encode('utf-8')
             st.download_button("Baixar Relatório de Triagem (CSV)", csv_data, "relatorio_triagem_passos_magicos.csv", "text/csv")
