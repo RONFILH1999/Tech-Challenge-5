@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Estilização CSS adaptável com suporte robusto ao Modo Escuro e Claro
+# Estilização CSS com foco exclusivo na correção do Modo Light (mantendo o Modo Dark intacto)
 st.markdown("""
 <style>
     /* Estilos dos cabeçalhos específicos */
@@ -26,7 +26,7 @@ st.markdown("""
         margin-bottom: 1.5rem;
     }
     
-    /* Forçar Fundo Escuro e Letras Brancas no Modo Escuro do Streamlit */
+    /* MODO DARK: Mantido intacto conforme solicitado anteriormente */
     [data-theme="dark"] .stApp {
         background-color: #0E1117 !important;
         color: #FFFFFF !important;
@@ -47,12 +47,25 @@ st.markdown("""
         border-color: #4A4A4A !important;
     }
 
-    /* Suporte para Modo System baseado na preferência do Sistema Operacional */
-    @media (prefers-color-scheme: dark) {
-        .stApp {
-            background-color: #0E1117;
-            color: #FFFFFF;
-        }
+    /* MODO LIGHT: Fundo claro e letras escuras */
+    [data-theme="light"] .stApp {
+        background-color: #F8FAFC !important;
+        color: #0B0F19 !important;
+    }
+    
+    [data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3, 
+    [data-theme="light"] h4, [data-theme="light"] h5, [data-theme="light"] h6, 
+    [data-theme="light"] p, [data-theme="light"] span, [data-theme="light"] label, 
+    [data-theme="light"] .stMarkdown, [data-theme="light"] .stRadio label, 
+    [data-theme="light"] .stCheckbox label, [data-theme="light"] .stSlider label {
+        color: #0B0F19 !important;
+    }
+
+    [data-theme="light"] .stTextInput input, [data-theme="light"] .stNumberInput input, 
+    [data-theme="light"] .stSelectbox div[data-baseweb="select"] {
+        background-color: #FFFFFF !important;
+        color: #0B0F19 !important;
+        border-color: #94A3B8 !important;
     }
     
     /* Alertas de Risco com Cores Adaptadas */
