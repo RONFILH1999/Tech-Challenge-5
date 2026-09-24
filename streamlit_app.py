@@ -15,7 +15,6 @@ st.set_page_config(
 # Estilização CSS adaptativa para Modo Claro e Modo Escuro nativos do Streamlit
 st.markdown("""
 <style>
-    /* Estilos dinâmicos baseados no tema do Streamlit */
     @media (prefers-color-scheme: dark) {
         .risk-high {
             background-color: rgba(239, 68, 68, 0.15);
@@ -139,6 +138,7 @@ with st.sidebar:
         [
             "Simulador Individual",
             "Simulação em Lote",
+            "Manual de Uso",
             "Diagnóstico & Storytelling",
             "Dicionário de Indicadores",
             "Metodologia ML"
@@ -308,7 +308,34 @@ elif menu == "Simulação em Lote":
             st.error("O arquivo submetido não contém todas as colunas obrigatórias.")
 
 # -------------------------------------------------------------
-# ABA 3: DIAGNÓSTICO & STORYTELLING
+# ABA 3: MANUAL DE USO
+# -------------------------------------------------------------
+elif menu == "Manual de Uso":
+    st.markdown('<div class="main-header">Manual de Uso da Ferramenta</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Guia prático para orientar professores, mentores e equipe pedagógica.</div>', unsafe_allow_html=True)
+
+    st.markdown("""
+    ### 1. Simulador Individual
+    * **O que faz:** Calcula a probabilidade de um aluno específico enfrentar dificuldades ou defasagem no próximo ciclo.
+    * **Como utilizar:** 
+      1. Utilize os botões de **Arquétipos de Exemplo** para carregar perfis hipotéticos de teste (Quartzo, Ágata, Ametista ou Topázio).
+      2. Ajuste os seletores (*sliders* e campos numéricos) conforme as notas e características reais do seu aluno.
+      3. Clique em **"Executar Predição de Risco"** para visualizar a porcentagem de risco, o diagnóstico automático e um **Plano de Ação Pedagógico** personalizado.
+
+    ### 2. Simulação em Lote
+    * **O que faz:** Realiza a triagem preditiva de turmas inteiras de forma automatizada.
+    * **Como utilizar:** 
+      1. Envie um arquivo `.csv` contendo as colunas obrigatórias (`idade`, `ano_ingresso`, `inde`, `ida`, `ieg`, `iaa`, `ips`, `ipp`, `ipv`, `defasagem_escolar`, `pedra_ord`). Caso queira testar rapidamente sem um arquivo próprio, clique em **"Carregar Amostra Padrão para Teste"**.
+      2. O sistema processará os dados, exibirá uma tabela consolidada com o nível de risco de cada estudante e permitirá o download dos resultados em CSV.
+
+    ### 3. Demais Módulos
+    * **Diagnóstico & Storytelling:** Apresenta insights estratégicos e descobertas da série histórica da instituição.
+    * **Dicionário de Indicadores:** Esclarece o conceito técnico de cada sigla avaliada (INDE, IDA, IEG, IPS, etc.).
+    * **Metodologia ML:** Descreve a arquitetura do modelo preditivo e métricas de validação técnica.
+    """)
+
+# -------------------------------------------------------------
+# ABA 4: DIAGNÓSTICO & STORYTELLING
 # -------------------------------------------------------------
 elif menu == "Diagnóstico & Storytelling":
     st.markdown('<div class="main-header">Insights Analíticos</div>', unsafe_allow_html=True)
@@ -323,7 +350,7 @@ elif menu == "Diagnóstico & Storytelling":
         st.write("Variações negativas no Indicador Psicossocial antecedem quedas de desempenho acadêmico (IDA) no ciclo seguinte, servindo como alerta precoce essencial.")
 
 # -------------------------------------------------------------
-# ABA 4: DICIONÁRIO DE INDICADORES
+# ABA 5: DICIONÁRIO DE INDICADORES
 # -------------------------------------------------------------
 elif menu == "Dicionário de Indicadores":
     st.markdown('<div class="main-header">Dicionário de Métricas</div>', unsafe_allow_html=True)
@@ -343,7 +370,7 @@ elif menu == "Dicionário de Indicadores":
         st.markdown(f"**{sigla}**: {desc}")
 
 # -------------------------------------------------------------
-# ABA 5: METODOLOGIA ML
+# ABA 6: METODOLOGIA ML
 # -------------------------------------------------------------
 elif menu == "Metodologia ML":
     st.markdown('<div class="main-header">Pipeline de Machine Learning</div>', unsafe_allow_html=True)
@@ -351,7 +378,7 @@ elif menu == "Metodologia ML":
     
     st.markdown("""
     - **Validação:** Uso de `GroupShuffleSplit` baseado no ID do aluno (`RA`) para isolar ciclos temporais.
-    - **Modelo Campeão:** Regressão Logística otimizada, garantindo interpretabilidade direta para a equipe pedagógica.
+    - **Modelo Campeão:** Regressão Logística otimizada, garantindo interpretabilidade direta para laçada pedagógica.
     """)
     
     df_perf = pd.DataFrame([
