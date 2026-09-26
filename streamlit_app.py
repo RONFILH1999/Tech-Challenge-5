@@ -168,13 +168,7 @@ if menu == "Manual de Uso":
     ### 2. Simulação em Lote
     * **O que faz:** Realiza a triagem preditiva de turmas inteiras de forma automatizada.
     * **Como utilizar:** 
-      1. Envie um arquivo `.csv` contendo as colunas obrigatórias (`idade`, `ano_ingresso`, `inde`, `ida`, `ieg`, `iaa`, `ips`, `ipp`, `ipv`, `defasagem_escolar`, `pedra_ord`). Caso queira testar rapidamente sem um arquivo próprio, clique em **"Carregar Amostra Padrão para Teste"**.
-      2. O sistema processará os dados, exibirá uma tabela consolidada com o nível de risco de cada estudante e permitirá o download dos resultados em CSV.
-
-    ### 3. Demais Módulos
-    * **Diagnóstico & Storytelling:** Apresenta insights estratégicos e descobertas da série histórica da instituição.
-    * **Dicionário de Indicadores:** Esclarece o conceito técnico de cada sigla avaliada (INDE, IDA, IEG, IPS, etc.).
-    * **Metodologia ML:** Descreve a arquitetura do modelo preditivo e métricas de validação técnica.
+      1. Envie um arquivo `.csv` contendo as colunas obrigatórias. Caso queira testar rapidamente, clique em **"Carregar Amostra Padrão para Teste"**.
     """)
 
 # -------------------------------------------------------------
@@ -184,51 +178,76 @@ elif menu == "Simulador Individual":
     st.markdown('<div class="main-header">Simulador Preditivo de Risco Escolar</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">Ferramenta de apoio pedagógico para identificar antecipadamente estudantes em vulnerabilidade de desempenho.</div>', unsafe_allow_html=True)
 
-    st.info("💡 **Como usar:** Clique em um dos **arquétipos de exemplo** abaixo para preencher os campos automaticamente com um perfil hipotético, ou altere os seletores livremente para simular o caso real de um aluno específico.")
+    st.info("💡 **Como usar:** Clique em um dos **arquétipos de exemplo** abaixo para preencher os campos automaticamente, ou altere os seletores livremente.")
+
+    # Inicialização do st.session_state para os parâmetros do simulador
+    if 'sim_idade' not in st.session_state:
+        st.session_state.sim_idade = 14
+        st.session_state.sim_ano_ingresso = 2021
+        st.session_state.sim_defasagem = 0
+        st.session_state.sim_ida = 6.8
+        st.session_state.sim_ieg = 7.8
+        st.session_state.sim_ips = 7.0
+        st.session_state.sim_ipp = 6.9
+        st.session_state.sim_ipv = 7.1
+        st.session_state.sim_iaa = 8.2
+        st.session_state.sim_pedra = 2
+        st.session_state.sim_inde = 7.2
+
+    def carregar_arquétipo(dados):
+        st.session_state.sim_idade = dados['idade']
+        st.session_state.sim_ano_ingresso = dados['ano_ingresso']
+        st.session_state.sim_defasagem = dados['defasagem_escolar']
+        st.session_state.sim_ida = dados['ida']
+        st.session_state.sim_ieg = dados['ieg']
+        st.session_state.sim_ips = dados['ips']
+        st.session_state.sim_ipp = dados['ipp']
+        st.session_state.sim_ipv = dados['ipv']
+        st.session_state.sim_iaa = dados['iaa']
+        st.session_state.sim_pedra = dados['pedra']
+        st.session_state.sim_inde = dados['inde']
 
     st.markdown("##### Carregar Arquétipo de Exemplo (Perfil Hipotético)")
     c1, c2, c3, c4 = st.columns(4)
     
-    perfil_selecionado = None
     if c1.button("Ex: Quartzo (Vulnerável)", use_container_width=True):
-        perfil_selecionado = {'idade': 15, 'ano_ingresso': 2023, 'inde': 5.2, 'ida': 4.8, 'ieg': 5.1, 'iaa': 8.0, 'ips': 4.9, 'ipp': 5.0, 'ipv': 5.2, 'defasagem_escolar': 2, 'pedra': 1}
+        carregar_arquétipo({'idade': 15, 'ano_ingresso': 2023, 'inde': 5.2, 'ida': 4.8, 'ieg': 5.1, 'iaa': 8.0, 'ips': 4.9, 'ipp': 5.0, 'ipv': 5.2, 'defasagem_escolar': 2, 'pedra': 1})
+        st.rerun()
     if c2.button("Ex: Ágata (Estável)", use_container_width=True):
-        perfil_selecionado = {'idade': 13, 'ano_ingresso': 2022, 'inde': 6.8, 'ida': 6.2, 'ieg': 7.4, 'iaa': 7.8, 'ips': 6.5, 'ipp': 6.8, 'ipv': 6.5, 'defasagem_escolar': 0, 'pedra': 2}
+        carregar_arquétipo({'idade': 13, 'ano_ingresso': 2022, 'inde': 6.8, 'ida': 6.2, 'ieg': 7.4, 'iaa': 7.8, 'ips': 6.5, 'ipp': 6.8, 'ipv': 6.5, 'defasagem_escolar': 0, 'pedra': 2})
+        st.rerun()
     if c3.button("Ex: Ametista (Avançado)", use_container_width=True):
-        perfil_selecionado = {'idade': 14, 'ano_ingresso': 2021, 'inde': 8.0, 'ida': 7.8, 'ieg': 8.5, 'iaa': 8.2, 'ips': 7.9, 'ipp': 8.0, 'ipv': 8.1, 'defasagem_escolar': 0, 'pedra': 3}
+        carregar_arquétipo({'idade': 14, 'ano_ingresso': 2021, 'inde': 8.0, 'ida': 7.8, 'ieg': 8.5, 'iaa': 8.2, 'ips': 7.9, 'ipp': 8.0, 'ipv': 8.1, 'defasagem_escolar': 0, 'pedra': 3})
+        st.rerun()
     if c4.button("Ex: Topázio (Protagonista)", use_container_width=True):
-        perfil_selecionado = {'idade': 12, 'ano_ingresso': 2020, 'inde': 8.9, 'ida': 8.5, 'ieg': 9.2, 'iaa': 8.7, 'ips': 8.3, 'ipp': 8.6, 'ipv': 8.8, 'defasagem_escolar': 0, 'pedra': 4}
-
-    defaults = perfil_selecionado if perfil_selecionado else {
-        'idade': 14, 'ano_ingresso': 2021, 'inde': 7.2, 'ida': 6.8, 'ieg': 7.8,
-        'iaa': 8.2, 'ips': 7.0, 'ipp': 6.9, 'ipv': 7.1, 'defasagem_escolar': 0, 'pedra': 2
-    }
+        carregar_arquétipo({'idade': 12, 'ano_ingresso': 2020, 'inde': 8.9, 'ida': 8.5, 'ieg': 9.2, 'iaa': 8.7, 'ips': 8.3, 'ipp': 8.6, 'ipv': 8.8, 'defasagem_escolar': 0, 'pedra': 4})
+        st.rerun()
 
     st.markdown("---")
     st.markdown("#### Parâmetros Atuais do Estudante")
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        idade = st.number_input("Idade", min_value=6, max_value=24, value=defaults['idade'], step=1)
-        ano_ingresso = st.number_input("Ano de Ingresso", min_value=2015, max_value=2024, value=defaults['ano_ingresso'], step=1)
-        defasagem_escolar = st.number_input("Defasagem (Anos)", min_value=-2, max_value=6, value=defaults['defasagem_escolar'], step=1)
+        idade = st.number_input("Idade", min_value=6, max_value=24, value=st.session_state.sim_idade, step=1, key='sim_idade')
+        ano_ingresso = st.number_input("Ano de Ingresso", min_value=2015, max_value=2024, value=st.session_state.sim_ano_ingresso, step=1, key='sim_ano_ingresso')
+        defasagem_escolar = st.number_input("Defasagem (Anos)", min_value=-2, max_value=6, value=st.session_state.sim_defasagem, step=1, key='sim_defasagem')
         
     with col2:
-        ida = st.slider("IDA (Desempenho Acadêmico)", 0.0, 10.0, float(defaults['ida']), 0.1)
-        ieg = st.slider("IEG (Engajamento)", 0.0, 10.0, float(defaults['ieg']), 0.1)
-        ips = st.slider("IPS (Psicossocial)", 0.0, 10.0, float(defaults['ips']), 0.1)
+        ida = st.slider("IDA (Desempenho Acadêmico)", 0.0, 10.0, float(st.session_state.sim_ida), 0.1, key='sim_ida')
+        ieg = st.slider("IEG (Engajamento)", 0.0, 10.0, float(st.session_state.sim_ieg), 0.1, key='sim_ieg')
+        ips = st.slider("IPS (Psicossocial)", 0.0, 10.0, float(st.session_state.sim_ips), 0.1, key='sim_ips')
 
     with col3:
-        ipp = st.slider("IPP (Psicopedagógico)", 0.0, 10.0, float(defaults['ipp']), 0.1)
-        ipv = st.slider("IPV (Ponto de Virada)", 0.0, 10.0, float(defaults['ipv']), 0.1)
-        iaa = st.slider("IAA (Autoavaliação)", 0.0, 10.0, float(defaults['iaa']), 0.1)
+        ipp = st.slider("IPP (Psicopedagógico)", 0.0, 10.0, float(st.session_state.sim_ipp), 0.1, key='sim_ipp')
+        ipv = st.slider("IPV (Ponto de Virada)", 0.0, 10.0, float(st.session_state.sim_ipv), 0.1, key='sim_ipv')
+        iaa = st.slider("IAA (Autoavaliação)", 0.0, 10.0, float(st.session_state.sim_iaa), 0.1, key='sim_iaa')
 
     col_pedra, col_inde = st.columns(2)
     with col_pedra:
         pedra_opcoes = {1: "1. Quartzo", 2: "2. Ágata", 3: "3. Ametista", 4: "4. Topázio"}
-        pedra_ord = st.selectbox("Classificação da Pedra Atual", options=[1, 2, 3, 4], index=defaults['pedra']-1, format_func=lambda x: pedra_opcoes[x])
+        pedra_ord = st.selectbox("Classificação da Pedra Atual", options=[1, 2, 3, 4], index=st.session_state.sim_pedra-1, format_func=lambda x: pedra_opcoes[x], key='sim_pedra')
     with col_inde:
-        inde = st.slider("INDE Geral", 0.0, 10.0, float(defaults['inde']), 0.1)
+        inde = st.slider("INDE Geral", 0.0, 10.0, float(st.session_state.sim_inde), 0.1, key='sim_inde')
 
     df_estudante = pd.DataFrame([{
         'idade': idade, 'ano_ingresso': ano_ingresso, 'inde': inde, 'ida': ida,
